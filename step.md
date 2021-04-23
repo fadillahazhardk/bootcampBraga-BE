@@ -5,3 +5,5 @@
 
 5. Git init
 6. Create gitignore and ignore nodemodule, config file, etc
+
+7. Init and setup fastify-static
