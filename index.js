@@ -17,11 +17,13 @@ fastify.register(require("point-of-view"), {
     ejs: require("ejs"),
   },
 });
+fastify.register(require("fastify-swagger"), require("./config/swagger"));
 
 // Declare a route
 fastify.register(require("./routes/static"));
 fastify.register(require("./routes/ssr"));
 fastify.register(require("./routes/api"));
+fastify.register(require("./routes/profiles"), { prefix: "/api/profiles" });
 
 // Run the server!
 const start = async () => {

@@ -1,5 +1,5 @@
 async function routes(fastify, options) {
-  fastify.get("/api", async (request, reply) => {
+  fastify.get("/mantap", async (request, reply) => {
     reply.send({ halo: "mantap" });
   });
   fastify.get("/table/create", async (req, reply) => {

@@ -44,7 +44,7 @@ VALUES
 RETURNING id ;
 
 --@block
-SELECT * FROM profile;
+SELECT * FROM profiles;
 
 --@block
 UPDATE profiles
