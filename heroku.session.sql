@@ -38,13 +38,13 @@ DROP TABLE profiles;
 -- CRUD ROWS
 
 --@block
-INSERT INTO profiles (fltr, imgSrc, title, summary, galleryHref, galleryTitle)
+INSERT INTO profiles (filter, imgSrc, title, summary, galleryHref, galleryTitle)
 VALUES 
     ('filter-app', 'assets/img/portfolio/portfolio-1.jpg', 'App 1', 'App', 'assets/img/portfolio/portfolio-1.jpg', 'App 1')
 RETURNING id ;
 
 --@block
-SELECT * FROM profiles;
+SELECT * FROM profile;
 
 --@block
 UPDATE profiles
@@ -55,3 +55,5 @@ WHERE id = 4;
 
 --@block
 DELETE FROM profiles WHERE id=1;
+
+--@block

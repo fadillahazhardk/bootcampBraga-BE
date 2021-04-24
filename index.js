@@ -3,11 +3,12 @@ const fastify = require("fastify")({ logger: true });
 const fastifyEnv = require("fastify-env");
 
 //REGISTER PLUGIN
-fastify.register(require('fastify-postgres'), {
-  connectionString: process.env.PGSTRING
-})
 require("dotenv").config(require("./config/env").options.dotenv);
 fastify.register(fastifyEnv, require("./config/env").options);
+fastify.register(require("fastify-postgres"), {
+  connectionString: process.env.PGSTRING,
+  ssl: { rejectUnauthorized: false },
+});
 fastify.register(require("fastify-static"), require("./config/static").public);
 fastify.register(require("fastify-static"), require("./config/static").assets);
 fastify.register(require("fastify-static"), require("./config/static").forms);

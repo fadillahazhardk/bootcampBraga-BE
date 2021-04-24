@@ -7,7 +7,7 @@ async function routes(fastify, options) {
     const returnVal = await fastify.pg /*client*/
       .query(
         `CREATE TABLE ${req.query.name} (
-                     ID int,
+                     ID SERIAL PRIMARY KEY,
                      filter varchar(255),
                      imgSrc varchar(255),
                      title varchar(255),
