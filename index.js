@@ -1,23 +1,22 @@
-const dotenv = require("dotenv");
-
 // Require the framework and instantiate it
 const fastify = require("fastify")({ logger: true });
+const fastifyEnv = require("fastify-env");
 
 //REGISTER PLUGIN
+require("dotenv").config(require("./config/env").options.dotenv);
+fastify.register(fastifyEnv, require("./config/env").options);
 fastify.register(require("fastify-static"), require("./config/static").public);
 fastify.register(require("fastify-static"), require("./config/static").assets);
 fastify.register(require("fastify-static"), require("./config/static").forms);
-
-//
-const config = dotenv.config({
-  path: "./config/config.env",
+fastify.register(require("point-of-view"), {
+  engine: {
+    ejs: require("ejs"),
+  },
 });
 
 // Declare a route
-//SSR
-fastify.get("/", function (req, reply) {
-  return reply.sendFile("index.html"); // serving path.join(__dirname, 'public', 'index.html') directly
-});
+fastify.register(require("./routes/static"));
+fastify.register(require("./routes/ssr"));
 
 //API
 fastify.get("/api", async (request, reply) => {
