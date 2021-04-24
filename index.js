@@ -1,3 +1,5 @@
+const dotenv = require("dotenv");
+
 // Require the framework and instantiate it
 const fastify = require("fastify")({ logger: true });
 
@@ -5,6 +7,11 @@ const fastify = require("fastify")({ logger: true });
 fastify.register(require("fastify-static"), require("./config/static").public);
 fastify.register(require("fastify-static"), require("./config/static").assets);
 fastify.register(require("fastify-static"), require("./config/static").forms);
+
+//
+const config = dotenv.config({
+  path: "./config/config.env",
+});
 
 // Declare a route
 //SSR
@@ -20,7 +27,7 @@ fastify.get("/api", async (request, reply) => {
 // Run the server!
 const start = async () => {
   try {
-    await fastify.listen(5000);
+    await fastify.listen(process.env.PORT);
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);

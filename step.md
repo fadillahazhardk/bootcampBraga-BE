@@ -13,6 +13,7 @@
 9.1. Setup package json engine and change server to listening in 5000
 9. Heroku login
 10. Heroku create
+11.1. Setup environment variable in heroku
 11. git push heroku main
 
 

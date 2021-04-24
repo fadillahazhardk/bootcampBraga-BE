@@ -9,10 +9,11 @@
   "author": "fadillahazhardk",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "fastify": "^3.15.0",
     "fastify-static": "^4.0.1"
   },
-  "engines":{
+  "engines": {
     "node": ">=10.0.0"
   }
 }
