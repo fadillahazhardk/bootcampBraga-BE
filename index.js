@@ -6,7 +6,7 @@ const fastifyEnv = require("fastify-env");
 require("dotenv").config(require("./config/env").options.dotenv);
 fastify.register(fastifyEnv, require("./config/env").options);
 fastify.register(require("fastify-postgres"), {
-  connectionString: process.env.PGSTRING,
+  connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false },
 });
 fastify.register(require("fastify-static"), require("./config/static").public);
