@@ -1,5 +1,5 @@
 {
-    "desc": "Ini description",
+    "desc": "Ini Portofolio",
     "categories": [
       { "data-filter": ".filter-app", "name": "App" },
       { "data-filter": ".filter-card", "name": "Card" },

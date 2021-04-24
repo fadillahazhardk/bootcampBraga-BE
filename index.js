@@ -12,20 +12,24 @@ fastify.register(require("fastify-postgres"), {
 fastify.register(require("fastify-static"), require("./config/static").public);
 fastify.register(require("fastify-static"), require("./config/static").assets);
 fastify.register(require("fastify-static"), require("./config/static").forms);
+fastify.register(require("fastify-swagger"), require("./config/swagger"));
 fastify.register(require("point-of-view"), {
   engine: {
     ejs: require("ejs"),
   },
 });
-fastify.register(require("fastify-swagger"), require("./config/swagger"));
 
 // Declare a route
 fastify.register(require("./routes/static"));
 fastify.register(require("./routes/ssr"));
-fastify.register(require("./routes/api"));
 fastify.register(require("./routes/profiles"), { prefix: "/api/profiles" });
+// fastify.register(require("./routes/api"));
 
 // Run the server!
+fastify.ready((err) => {
+  if (err) throw err;
+  fastify.swagger();
+});
 const start = async () => {
   try {
     await fastify.listen(process.env.PORT, "0.0.0.0");
