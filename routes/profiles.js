@@ -1,4 +1,6 @@
 const { BasicId, BasicMessage, BasicItem } = require("../schema");
+const QueryStream = require("pg-query-stream");
+const JSONStream = require("JSONStream");
 
 async function routes(fastify, options) {
   //GET ALL PORTOFOLIO
@@ -14,11 +16,12 @@ async function routes(fastify, options) {
     },
     async (req, reply) => {
       try {
-        const { rows: returnVal } = await fastify.pg.query(
-          `SELECT * FROM profiles;`,
-          []
-        );
-        return returnVal;
+        const client = await fastify.pg.connect();
+        const query = new QueryStream("SELECT * FROM profiles;", []);
+        const stream = client.query(query);
+        const jsonStream = stream.pipe(JSONStream.stringify());
+        jsonStream.on("end", client.release);
+        reply.send(jsonStream);
       } catch (err) {
         return err;
       }
@@ -36,9 +39,19 @@ async function routes(fastify, options) {
           "5xx": { ...BasicMessage, description: "Failed response" },
         },
         body: BasicItem,
+        security: [
+          {
+            bearerAuth: [],
+          },
+        ],
       },
+      preValidation: [fastify.authenticate],
     },
     async (req, reply) => {
+      const { email } = req.user;
+      if (email !== process.env.ADMIN_EMAIL)
+        throw Error("Punteun ga boleh bro, ente bukan admin");
+
       try {
         const {
           filter,
@@ -77,10 +90,20 @@ async function routes(fastify, options) {
         },
         body: BasicItem,
         params: BasicId,
+        security: [
+          {
+            bearerAuth: [],
+          },
+        ],
       },
+      preValidation: [fastify.authenticate],
     },
     async (req, reply) => {
       try {
+        const { email } = req.user;
+        if (email !== process.env.ADMIN_EMAIL)
+          throw Error("Punteun ga boleh bro, ente bukan admin");
+
         const {
           filter,
           imgSrc,
@@ -140,18 +163,29 @@ async function routes(fastify, options) {
           "2xx": { ...BasicMessage, description: "Successful item deletion" },
           "5xx": { ...BasicMessage, description: "Failed response" },
         },
+        security: [
+          {
+            bearerAuth: [],
+          },
+        ],
         params: BasicId,
       },
+      preValidation: [fastify.authenticate],
     },
     async (req, reply) => {
       try {
+        const { email } = req.user;
+        if (email !== process.env.ADMIN_EMAIL)
+          throw Error("Punteun ga boleh bro, ente bukan admin");
+
         const returnVal = await fastify.pg.query(
           `DELETE FROM profiles WHERE id=$1;`,
           [req.params.id]
         );
         let message = "Sukses menghapus item!";
-        if (returnVal.rowCount === 0) message = "Item portofolio dengan ID tersebut tidak ada."
-        return { message};
+        if (returnVal.rowCount === 0)
+          message = "Item portofolio dengan ID tersebut tidak ada.";
+        return { message };
       } catch (err) {
         return err;
       }

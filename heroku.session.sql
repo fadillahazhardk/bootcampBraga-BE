@@ -57,3 +57,18 @@ WHERE id = 4;
 DELETE FROM profiles WHERE id=1;
 
 --@block
+-- Auth
+CREATE TABLE user_auth (
+        email VARCHAR(100) PRIMARY KEY,
+        hashed_password varchar(255)
+    );
+
+--@block
+INSERT INTO user_auth (email, hashed_password)
+VALUES 
+    ('admin@admin.com', 'string')
+RETURNING email;
+
+
+--@block
+DELETE FROM user_auth WHERE true;
